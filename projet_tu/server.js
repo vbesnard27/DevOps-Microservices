@@ -16,5 +16,5 @@ app.post('/', (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log('Le serveur est démarré sur le port 3000');
+  console.log('Le serveur est démarré: http://localhost:3000/');
 });
