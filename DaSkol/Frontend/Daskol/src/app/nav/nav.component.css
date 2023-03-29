@@ -1,0 +1,64 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+mat-toolbar {
+  background-color: #fde2e2;
+  height: var(--height);
+  display: flex;
+  justify-content: space-between;
+  border-bottom: black 2px solid;
+}
+
+.gauche {
+  order: 1;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+button {
+  background-color: #ba9c9c;
+  border-radius: 10px;
+  font-size: 20px;
+  margin-left: 10px;
+  font-weight: 500;
+}
+
+.gauche > button {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.divOverlays {
+  position: absolute;
+  top: 35px;
+}
+
+.overlay {
+  background-color: #fde2e2;
+  display: block;
+}
+
+app-searchbar {
+  margin: 0 20px;
+}
+
+.centre {
+  order: 2;
+}
+
+#logoDaskol {
+  height: var(--height);
+  transform: translateX(-50%);
+}
+
+.droite {
+  order: 3;
+  display: flex;
+  align-items: center;
+}
+
+#loginIcon {
+  height: calc(var(--height) - 20px);
+}

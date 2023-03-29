@@ -1,0 +1,7 @@
+<app-nav></app-nav>
+<div class="home">
+	<div class="titre  text">Liste des {{type}}</div>
+	<div class="liste" *ngFor="let ecole of ecoleToShow">
+		<app-ecole-card [ecole]="ecole"></app-ecole-card>
+	</div>
+</div>

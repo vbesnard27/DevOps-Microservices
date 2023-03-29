@@ -1,0 +1,22 @@
+.ecole-card {
+  height: 80px;
+  background-color: #fde2e2;
+  margin: 10px;
+}
+
+#libelle {
+  margin-bottom: 0;
+  font-weight: 500;
+}
+
+#adresse {
+  margin-left: 20px;
+}
+
+#site_web {
+  float: right;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  margin: 10px;
+}

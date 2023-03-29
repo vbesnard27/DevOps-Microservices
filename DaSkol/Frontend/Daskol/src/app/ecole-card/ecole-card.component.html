@@ -1,0 +1,11 @@
+<div class="ecole-card" (click)="goto('/ecole',ecole)">
+	<div class="text" style="float:left; margin:10px">
+		<h2 id="libelle">{{ ecole.etablissement }}</h2>
+		<p id="adresse">{{ecole.adresse}}</p>
+	</div>
+	<img src="./../../assets/logo_ESIR.png" alt="logo_ecole" style="float:left;max-height: 80px;">
+	<div>
+
+		<a id="site_web" href="{{ecole.site_web}}">{{ecole.site_web}}</a>
+	</div>
+</div>
