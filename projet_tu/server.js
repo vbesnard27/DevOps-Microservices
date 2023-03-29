@@ -20,6 +20,9 @@ app.post('/', (req, res) => {
 app.listen(3000, () => {
   console.log('Le serveur est démarré: http://localhost:3000/');
 });
+
+
+
 db.run('CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT, password TEXT)');
 db.run('INSERT INTO users (username, password) VALUES (?, ?)', ['john', 'password123']);
 db.run('INSERT INTO users (username, password) VALUES (?, ?)', ['jane', 'abc123']);
@@ -32,3 +35,4 @@ db.all('SELECT * FROM users', [], (err, rows) => {
     console.log(row.username, row.password);
   });
 });
+db.close()
