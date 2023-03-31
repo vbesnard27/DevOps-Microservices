@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Informations</title>
+</head>
+<body>
+  <h1>Bienvenue <%= username %>!</h1>
+  <p>Voici les informations:</p>
+  <ul>
+    <% infos.forEach(function(info) { %>
+      <li>
+        <h2><%= info.titre %></h2>
+        <p><%= info.contenu %></p>
+      </li>
+    <% }); %>
+  </ul>
+  <a href="/">Déconnexion</a>
+</body>
+</html>
