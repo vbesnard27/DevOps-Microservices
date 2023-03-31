@@ -1,9 +1,0 @@
-.liste {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-app-ecole-card {
-  width: 80%;
-}

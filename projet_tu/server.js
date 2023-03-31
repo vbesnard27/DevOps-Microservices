@@ -18,6 +18,13 @@ db.serialize(() => {
   db.run('CREATE TABLE avis (id INTEGER PRIMARY KEY, username TEXT NOT NULL, commentaire TEXT NOT NULL)');
 });
 
+// Création de la table "formation" pour stocker les informations sur les formations
+db.serialize(() => {
+  db.run('CREATE TABLE formation (id INTEGER PRIMARY KEY, titre TEXT NOT NULL, description TEXT NOT NULL)');
+  db.run('INSERT INTO formation (titre, description) VALUES (?, ?)', ['Formation 1', 'Description de la formation 1']);
+  db.run('INSERT INTO formation (titre, description) VALUES (?, ?)', ['Formation 2', 'Description de la formation 2']);
+});
+
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
@@ -72,48 +79,51 @@ app.get('/infos', requireAuth, (req, res) => {
     { titre: 'Info 3', contenu: 'Contenu de l\'info 3' }
   ];
 
-  const username = req.session.username;
+  const username =req.session.username; // Récupération du nom d'utilisateur stocké dans la session
 
-  // Récupérez tous les avis des utilisateurs dans la base de données
-  db.all('SELECT * FROM avis', [], (err, rows) => {
-    if (err) {
-      console.error(err.message);
-      res.status(500).send('Erreur serveur');
-    } else {
-      const avis = rows;
-
-      // Affichez la page d'informations avec les avis des utilisateurs
-      res.render('infos', { username: username, infos: infos, avis: avis });
-    }
+  // Récupérez tous les avis de la base de données
+  db.all('SELECT * FROM avis', (err, rows) => {
+  if (err) {
+  console.error(err.message);
+  res.status(500).send('Erreur serveur');
+  } else {
+  // Récupérez toutes les formations de la base de données
+  db.all('SELECT * FROM formation', (err, formations) => {
+  if (err) {
+  console.error(err.message);
+  res.status(500).send('Erreur serveur');
+  } else {
+  // Affichez la page d'informations avec les avis et les formations
+  res.render('infos', { username: username, infos: infos, avis: rows, formations: formations });
+  }
   });
-});
-
-// Route pour traiter la soumission du formulaire d'avis
-app.post('/avis', requireAuth, (req, res) => {
+  }
+  });
+  });
+  
+  // Route pour ajouter un avis
+  app.post('/ajouter-avis', requireAuth, (req, res) => {
   const username = req.session.username;
   const commentaire = req.body.commentaire;
   
-  // Enregistrez l'avis de l'utilisateur dans la base de données
+  // Ajoutez l'avis dans la base de données
   db.run('INSERT INTO avis (username, commentaire) VALUES (?, ?)', [username, commentaire], (err) => {
   if (err) {
   console.error(err.message);
   res.status(500).send('Erreur serveur');
   } else {
-  // Redirigez l'utilisateur vers la page d'informations
   res.redirect('/infos');
   }
   });
   });
   
-  // Route pour déconnecter l'utilisateur
+  // Route pour se déconnecter
   app.get('/logout', (req, res) => {
-  // Détruisez la session de l'utilisateur
   req.session.destroy();
-  // Redirigez l'utilisateur vers la page de connexion
   res.redirect('/');
   });
   
-  // Lancement du serveur
+  // Démarrage du serveur
   app.listen(port, () => {
   console.log(`Serveur démarré sur le port ${port}`);
   });
