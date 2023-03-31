@@ -15,6 +15,25 @@
       </li>
     <% }); %>
   </ul>
-  <a href="/">Déconnexion</a>
+  <p>Laissez un commentaire:</p>
+  <form action="/avis" method="POST">
+    <textarea name="commentaire"></textarea>
+    <br>
+    <button type="submit">Envoyer</button>
+  </form>
+  <h2>Avis des utilisateurs:</h2>
+  <% if (avis.length > 0) { %>
+    <ul>
+      <% avis.forEach(function(avis) { %>
+        <li>
+          <h3><%= avis.username %></h3>
+          <p><%= avis.commentaire %></p>
+        </li>
+      <% }); %>
+    </ul>
+  <% } else { %>
+    <p>Aucun avis pour le moment.</p>
+  <% } %>
+  <a href="/logout">Déconnexion</a>
 </body>
 </html>

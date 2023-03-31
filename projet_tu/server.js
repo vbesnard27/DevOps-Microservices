@@ -13,6 +13,11 @@ db.serialize(() => {
   db.run('INSERT INTO users (username, password) VALUES (?, ?)', ['jane', 'abc123']);
 });
 
+// Création de la table "avis" pour stocker les avis des utilisateurs
+db.serialize(() => {
+  db.run('CREATE TABLE avis (id INTEGER PRIMARY KEY, username TEXT NOT NULL, commentaire TEXT NOT NULL)');
+});
+
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
@@ -59,7 +64,7 @@ app.post('/', (req, res) => {
   });
 });
 
-// Route pour afficher la page d'informations
+// Route pour afficher la page d'informations et les avis des utilisateurs
 app.get('/infos', requireAuth, (req, res) => {
   const infos = [
     { titre: 'Info 1', contenu: 'Contenu de l\'info 1' },
@@ -69,9 +74,46 @@ app.get('/infos', requireAuth, (req, res) => {
 
   const username = req.session.username;
 
-  res.render('infos', { username: username, infos: infos });
+  // Récupérez tous les avis des utilisateurs dans la base de données
+  db.all('SELECT * FROM avis', [], (err, rows) => {
+    if (err) {
+      console.error(err.message);
+      res.status(500).send('Erreur serveur');
+    } else {
+      const avis = rows;
+
+      // Affichez la page d'informations avec les avis des utilisateurs
+      res.render('infos', { username: username, infos: infos, avis: avis });
+    }
+  });
 });
 
-app.listen(3000, () => {
-  console.log('Le serveur est démarré: http://localhost:3000/');
-});
+// Route pour traiter la soumission du formulaire d'avis
+app.post('/avis', requireAuth, (req, res) => {
+  const username = req.session.username;
+  const commentaire = req.body.commentaire;
+  
+  // Enregistrez l'avis de l'utilisateur dans la base de données
+  db.run('INSERT INTO avis (username, commentaire) VALUES (?, ?)', [username, commentaire], (err) => {
+  if (err) {
+  console.error(err.message);
+  res.status(500).send('Erreur serveur');
+  } else {
+  // Redirigez l'utilisateur vers la page d'informations
+  res.redirect('/infos');
+  }
+  });
+  });
+  
+  // Route pour déconnecter l'utilisateur
+  app.get('/logout', (req, res) => {
+  // Détruisez la session de l'utilisateur
+  req.session.destroy();
+  // Redirigez l'utilisateur vers la page de connexion
+  res.redirect('/');
+  });
+  
+  // Lancement du serveur
+  app.listen(port, () => {
+  console.log(`Serveur démarré sur le port ${port}`);
+  });
