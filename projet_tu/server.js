@@ -6,21 +6,21 @@ const app = express();
 const port = 3000;
 
 // Création de la base de données et de la table "users" avec deux utilisateurs pré-enregistrés
-const db = new sqlite3.Database(':memory:');
+const db = new sqlite3.Database('my_database.db');
 db.serialize(() => {
-  db.run('CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL)');
-  db.run('INSERT INTO users (username, password) VALUES (?, ?)', ['john', 'password123']);
-  db.run('INSERT INTO users (username, password) VALUES (?, ?)', ['jane', 'abc123']);
+  db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL)');
+  //db.run('INSERT INTO users (username, password) VALUES (?, ?)', ['john', 'password123']);
+  //db.run('INSERT INTO users (username, password) VALUES (?, ?)', ['jane', 'abc123']);
 });
 
 // Création de la table "avis" pour stocker les avis des utilisateurs
 db.serialize(() => {
-  db.run('CREATE TABLE avis (id INTEGER PRIMARY KEY, username TEXT NOT NULL, commentaire TEXT NOT NULL)');
+  db.run('CREATE TABLE IF NOT EXISTS avis (id INTEGER PRIMARY KEY, username TEXT NOT NULL, commentaire TEXT NOT NULL)');
 });
 
 // Création de la table "formation" pour stocker les informations sur les formations
 db.serialize(() => {
-  db.run('CREATE TABLE formation (id INTEGER PRIMARY KEY, titre TEXT NOT NULL, description TEXT NOT NULL)');
+  db.run('CREATE TABLE IF NOT EXISTS formation(id INTEGER PRIMARY KEY, titre TEXT NOT NULL, description TEXT NOT NULL)');
   db.run('INSERT INTO formation (titre, description) VALUES (?, ?)', ['Formation 1', 'Description de la formation 1']);
   db.run('INSERT INTO formation (titre, description) VALUES (?, ?)', ['Formation 2', 'Description de la formation 2']);
 });
